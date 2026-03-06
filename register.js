@@ -1,11 +1,3 @@
-
-
-const navigateuser = localStorage.getItem("validuser")
-
-if(navigateuser){
-    window.location.href="login.html"
-}
-
 const form=document.getElementById("registerform")
 
 form.addEventListener("submit",function(e){
@@ -17,16 +9,18 @@ form.addEventListener("submit",function(e){
 
     let users=JSON.parse(localStorage.getItem("users")) || []
 
-    const exists=users.find(user=>user.email===email)
+    const exists=users.find(user=>user.email=== email)
 
     if(exists){
         alert("User already exists");
+        window.location.href="login.html"
+        return; 
     }
 
     const user={name,email,password}
     users.push(user)
     localStorage.setItem("users",JSON.stringify(users))
     localStorage.setItem("validuser",JSON.stringify(user))
-    window.location.href="login.html"
+    window.location.href="home.html"
     form.reset();
 })
