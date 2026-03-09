@@ -1,26 +1,65 @@
-const form=document.getElementById("registerform")
+const session = JSON.parse(localStorage.getItem("sessionUser"));
 
-form.addEventListener("submit",function(e){
-    e.preventDefault()
+if (session) {
+  window.location.replace("home.html");
+}
 
-    const name=document.getElementById("name").value
-    const email=document.getElementById("email").value
-    const password=document.getElementById("password").value
+const form = document.getElementById("registerform");
 
-    let users=JSON.parse(localStorage.getItem("users")) || []
+const nameEl = document.getElementById("name");
+const emailEl = document.getElementById("email");
+const passwordEl = document.getElementById("password");
 
-    const exists=users.find(user=>user.email=== email)
+const nameError = document.getElementById("name-error");
+const emailError = document.getElementById("email-error");
+const passwordError = document.getElementById("password-error");
 
-    if(exists){
-        alert("User already exists");
-        window.location.href="login.html"
-        return; 
-    }
+form.addEventListener("submit", function(e) {
 
-    const user={name,email,password}
-    users.push(user)
-    localStorage.setItem("users",JSON.stringify(users))
-    localStorage.setItem("validuser",JSON.stringify(user))
-    window.location.href="home.html"
-    form.reset();
-})
+e.preventDefault();
+
+nameError.textContent="";
+emailError.textContent="";
+passwordError.textContent="";
+
+const name = nameEl.value.trim();
+const email = emailEl.value.trim().toLowerCase();
+const password = passwordEl.value;
+
+let valid=true;
+
+if(!name){
+nameError.textContent="Name required";
+valid=false;
+}
+
+if(!email){
+emailError.textContent="Email required";
+valid=false;
+}
+
+if(!password || password.length<6){
+passwordError.textContent="Password must be 6 characters";
+valid=false;
+}
+
+if(!valid) return;
+
+const users = JSON.parse(localStorage.getItem("users")) || [];
+
+const exists = users.find(u=>u.email===email);
+
+if(exists){
+emailError.textContent="Email already registered";
+return;
+}
+
+users.push({name,email,password});
+
+localStorage.setItem("users",JSON.stringify(users));
+
+localStorage.setItem("sessionUser",JSON.stringify({name,email}));
+
+window.location.href="home.html";
+
+});

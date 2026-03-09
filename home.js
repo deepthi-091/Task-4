@@ -1,14 +1,18 @@
-const sessionUser = JSON.parse(localStorage.getItem("sessionUser"))
+const session = JSON.parse(localStorage.getItem("sessionUser"));
 
-if(!sessionUser){
-
-    window.location.href="login.html"
-
+if(!session){
+window.location.replace("login.html");
 }
-document.getElementById("logout").addEventListener("click",function(){
 
-    localStorage.removeItem("sessionUser")
+const welcome = document.getElementById("welcome");
+const logoutBtn = document.getElementById("logout-btn");
 
-    window.location.href="login.html"
+welcome.textContent = "Welcome " + session.name + "!";
 
-})
+logoutBtn.addEventListener("click", function(){
+
+localStorage.removeItem("sessionUser");
+
+window.location.replace("login.html");
+
+});
